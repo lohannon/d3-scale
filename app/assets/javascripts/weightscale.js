@@ -11,6 +11,18 @@ function weightScaleChart(){
     var colors = d3.scale.category10().range();
     var fontSize = 16;
 
+    function toNearestTwentieth(num){
+        var twentieth = 5;
+        num = Math.round(num * 10);
+        var remainder = num % twentieth;
+        if(remainder > twentieth/2)
+            num = num + (twentieth - remainder);
+        else if (remainder < twentieth/2)
+            num = num - remainder;
+        return (num/10).toFixed(1);
+    }
+
+
     function chart(selection){
         selection.each(function(data, i){
             var select = this;
@@ -44,14 +56,17 @@ function weightScaleChart(){
 
             //construct svg elements for chart
             //________________________________
+            var svg = d3.select(select).append("svg")
+                .attr("width", width)
+                .attr("height", chartHeight + legendHeight);
 
             function drawChart(s){
-                var svg = d3.select(s).append("svg")
+                var chart = svg.append("g")
+                    .attr("class", "chart")
                     .attr("width", width)
-                    .attr("height", chartHeight)
-                    .append("g");
+                    .attr("height", chartHeight);
 
-                var bars = svg.selectAll(".bar")
+                var bars = chart.selectAll(".bar")
                     .data(data)
                     .enter().append("g");
 
@@ -70,9 +85,9 @@ function weightScaleChart(){
                     .attr("id", function(d) { return "drag-bar-" + d.id;} )
                     .attr("x", function(d) { return x(d.x1) - DRAGGABLE_WIDTH; } )
                     .attr("width", 10)
-                    .attr("y", chartHeight * 0.25 - chartHeight * 0.05)
-                    .attr("height", chartHeight/2 + chartHeight * 0.05)
-                    .style("fill", function(d) { return d.x1 == d.x0 ? "none" : d3.rgb(color(d.category)).darker(0.25).toString(); })
+                    .attr("y", chartHeight * 0.25)
+                    .attr("height", chartHeight/2)
+                    .style("fill", function(d) { return d.x1 == d.x0 ? "none" : d3.rgb(color(d.category)).darker(0.6).toString(); })
                     .call(drag);
                 //text
                 var barText = bars.append("text")
@@ -82,18 +97,18 @@ function weightScaleChart(){
                     .attr("x", function(d) { return x(d.x1) - fontSize; })
                     .attr("y", chartHeight/2)
                     .attr("dy", ".35em")
-                    .text(function(d) { return x(d.x1 - d.x0) > (fontSize*4) ? d.weight.toFixed(1) + "%": ""; });
+                    .text(function(d) { return x(d.x1 - d.x0) > (fontSize*4) ? d3.round(d.weight,1) + "%": ""; });
 
                 //legend
                 if(legend){
-                    var legendItemHeight = 20;
-                    var minLegendColumnWidth = 260;
+                    var legendItemHeight = fontSize*1.25;
+                    var minLegendColumnWidth = fontSize*15;
                     var numLegendItemsPerColumn = legendHeight/legendItemHeight;
                     var numLegendColumns = Math.ceil(data.length/numLegendItemsPerColumn);
                     numLegendColumns = Math.min(numLegendColumns, Math.floor(width/minLegendColumnWidth));
                     var legendColumnWidth = Math.floor(width/numLegendColumns);
 
-                    var legendSvg = d3.select(s).append("svg")
+                    var legendSvg = svg.append("g")
                         .attr("width", width)
                         .attr("height", legendHeight)
                         .attr("transform", "translate(0," + chartHeight + ")");
@@ -111,6 +126,8 @@ function weightScaleChart(){
                         legendColumn.append("rect")
                             .attr("width", legendItemHeight - 2)
                             .attr("height", legendItemHeight - 2)
+                            .attr("rx", 3)
+                            .attr("ry", 3)
                             .style("fill", function(d) { return color(d.category); });
                         legendColumn.append("text")
                             .attr("x", legendItemHeight + 4)
@@ -119,10 +136,10 @@ function weightScaleChart(){
                             .text(function(d) { return d.category; });
                         legendColumn.append("text")
                             .attr("id", function(d) { return "text-legend-" + d.id;} )
-                            .attr("x", minLegendColumnWidth - 60)
+                            .attr("x", minLegendColumnWidth - fontSize*4)
                             .attr("y", 9)
                             .attr("dy", ".35em")
-                            .text(function(d) { return d.weight.toFixed(1) + "%" });
+                            .text(function(d) { return d3.round(d.weight,1) + "%" });
                     }
                 }
             }
@@ -143,7 +160,7 @@ function weightScaleChart(){
                     //change text to represent weight
                     d3.select($(this).next()[0])
                         .attr("x", function(d) { return x(d.x1) - 15})
-                        .text(function(d) { return x(d.weight) > (fontSize*4)  ? d.weight.toFixed(1) + "%": "";});
+                        .text(function(d) { return x(d.weight) > (fontSize*4)  ? d3.round(d.weight,1)+ "%": "";});
                     //change neighbor to the right
                     var neighbor = $(this).closest("g").next();
                     var neighborData = data[i+1];
@@ -153,23 +170,23 @@ function weightScaleChart(){
                         .attr("width", x(neighborData.weight = neighborData.x1 - neighborData.x0));
                     //change neighbor text to represent weight
                     d3.select(neighbor.find('text')[0])
-                        .text(x(neighborData.weight) > (fontSize*4) ? neighborData.weight.toFixed(1) + "%": "");
+                        .text(x(neighborData.weight) > (fontSize*4) ? d3.round(neighborData.weight,1) + "%": "");
                     //if neighbor is now weighted at 0, then neighbor drag bar should be invisible
                     d3.select(neighbor.find('draggable')[0])
-                        .style("fill", function(n){ console.log(neighborData); console.log(neighborData.x1 == neighborData.x0);return neighborData.x1 == neighborData.x0 ? "none" : d3.rgb(color(d.category)).darker(0.25).toString();})
+                        .style("fill", function(n){ return neighborData.x1 == neighborData.x0 ? "none" : d3.rgb(color(d.category)).darker(0.25).toString();})
 
                     if(legend){
                         //get legend element corresponding to dragged element
                         d3.select($('#text-legend-' + i)[0])
-                            .text(function(d) { return d.weight.toFixed(1) + "%" });
+                            .text(function(d) { return d3.round(d.weight,1) + "%" });
                         d3.select($('#text-legend-' + (i+1))[0])
-                            .text(function(d) { return d.weight.toFixed(1) + "%" });
+                            .text(function(d) { return d3.round(d.weight,1) + "%" });
                     }
                 }
             }
 
             function dragReset(){
-                d3.select(select).selectAll("svg").remove();
+                d3.select(select).selectAll("g").remove();
                 drawChart(select);
             }
 

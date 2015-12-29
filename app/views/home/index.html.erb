@@ -22,6 +22,7 @@
 <div class="outer">
   <div class="inner">
   </div>
+  <div>Hello</div>
 </div>
 </body>
 
@@ -43,11 +44,11 @@
     sampleData = categories.map(function(c) { return {category: c, weight: 100/categories.length}; });
 
     var myChart = weightScaleChart()
-            .width(600)
-            .height(50)
+            .width(500)
+            .height(100)
             .colors(colorArray)
             .legend(true)
-            .legendHeight(80);
+            .legendHeight(100);
     d3.select('.inner')
             .datum(sampleData)
             .call(myChart);
