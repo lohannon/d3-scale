@@ -1,0 +1,54 @@
+<style>
+
+    .text{
+        fill: white;
+        stroke: white;
+        font-family: 'Tahoma', sans-serif;
+        text-anchor: end;
+    }
+    .draggable{
+        cursor:pointer;
+    }
+    .inner{
+        margin: 20px;
+    }
+    .legend{
+            font-family: 'Tahoma', sans-serif;
+    }
+
+</style>
+
+<body>
+<div class="outer">
+  <div class="inner">
+  </div>
+</div>
+</body>
+
+<script>
+
+    var colorScheme = {
+        orange: '#F4743B',
+        light_green: '#BEEE62',
+        green: '#70AE6E',
+        blue: '#3C6E71',
+        purple: '#483C46'
+    };
+    var colorArray = [];
+    for (var c in colorScheme) {
+        colorArray.push(colorScheme[c]);
+    }
+
+    categories = ['Class Exercises', 'Tests', 'Quiz', 'Homework', 'Something Else','Other','Extra Credit'];
+    sampleData = categories.map(function(c) { return {category: c, weight: 100/categories.length}; });
+
+    var myChart = weightScaleChart()
+            .width(600)
+            .height(50)
+            .legend(true)
+            .legendHeight(80);
+    d3.select('.inner')
+            .datum(sampleData)
+            .call(myChart);
+
+</script>
