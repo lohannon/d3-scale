@@ -10,7 +10,10 @@
         cursor:pointer;
     }
     .inner{
-        margin: 20px;
+        margin: 40px 15px;
+    }
+    .inner2{
+        margin: 20px 15px;
     }
     .legend{
             font-family: 'Tahoma', sans-serif;
@@ -22,7 +25,9 @@
 <div class="outer">
   <div class="inner">
   </div>
-  <div>Hello</div>
+  <div class="inner2">
+
+  </div>
 </div>
 </body>
 
@@ -40,7 +45,8 @@
         colorArray.push(colorScheme[c]);
     }
 
-    categories = ['Class Exercises', 'Tests', 'Quiz', 'Homework', 'Something Else','Other','Extra Credit'];
+
+    categories = ['Class Exercises', 'Tests', 'Quiz', 'Homework'];
     sampleData = categories.map(function(c) { return {category: c, weight: 100/categories.length}; });
 
     var myChart = weightScaleChart()
@@ -52,5 +58,15 @@
     d3.select('.inner')
             .datum(sampleData)
             .call(myChart);
+
+    var myOtherChart = weightScaleChart()
+            .width(400)
+            .height(50)
+            .colors(['#3FB2DA', '#A3D119', '#EE8E00', '#D900CA'])
+            .legend(true)
+            .legendHeight(100);
+        d3.select('.inner2')
+             .datum(sampleData)
+             .call(myOtherChart);
 
 </script>

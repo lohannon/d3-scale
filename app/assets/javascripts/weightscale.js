@@ -9,7 +9,7 @@ function weightScaleChart(){
     var width = 960;
     var chartHeight = 300;
     var colors = d3.scale.category10().range();
-    var fontSize = 16;
+    var fontSize = 14;
 
     function toNearestTwentieth(num){
         var twentieth = 5;
@@ -85,9 +85,9 @@ function weightScaleChart(){
                     .attr("id", function(d) { return "drag-bar-" + d.id;} )
                     .attr("x", function(d) { return x(d.x1) - DRAGGABLE_WIDTH; } )
                     .attr("width", 10)
-                    .attr("y", chartHeight * 0.25)
-                    .attr("height", chartHeight/2)
-                    .style("fill", function(d) { return d.x1 == d.x0 ? "none" : d3.rgb(color(d.category)).darker(0.6).toString(); })
+                    .attr("y", chartHeight * 0.25 - chartHeight*0.05)
+                    .attr("height", chartHeight/2 + chartHeight*0.05)
+                    .style("fill", function(d) { return d.x1 == d.x0 ? "none" : d3.rgb(color(d.category)).darker(0.25).toString(); })
                     .call(drag);
                 //text
                 var barText = bars.append("text")
@@ -204,7 +204,7 @@ function weightScaleChart(){
         if(!arguments.length) return chartHeight;
         else {
             chartHeight = value;
-            fontSize = Math.min(16, chartHeight*0.5);
+            fontSize = Math.min(14, chartHeight*0.5);
         }
         return chart;
     }
