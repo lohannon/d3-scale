@@ -8,7 +8,7 @@ function weightScaleChart(){
     var legendHeight = 0;
     var width = 960;
     var chartHeight = 300;
-    var colors = colorArray;
+    var colors = d3.scale.category10().range();
     var fontSize = 16;
 
     function chart(selection){
