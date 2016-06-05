@@ -15,3 +15,7 @@ The demo shows two different weight scale instances, which highlight the customi
 To adjust the weighted values on a scale, drag the verticle bar for each category to the desired percentage.
 
 ![Alt text](https://github.com/lohannon/d3-scale/blob/master/d3-scale-demo.png "d3-scale Demo")
+
+# Relevant Files
+1. The tool: /app/assets/javascripts/weightscale.js
+2. The home page that instantiates the tool with static data: /app/views/home/index.html.erb
