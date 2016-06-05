@@ -14,4 +14,4 @@ The demo shows two different weight scale instances, which highlight the customi
 
 To adjust the weighted values on a scale, drag the verticle bar for each category to the desired percentage.
 
-![Alt text](d3-scale-demo.jpg?raw=true "d3-scale Demo")
+![Alt text](https://github.com/lohannon/d3-scale/blob/master/d3-scale-demo.png "d3-scale Demo")
