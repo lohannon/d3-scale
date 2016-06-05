@@ -1,28 +1,14 @@
-== README
+== d3-scale
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+An interactive UI tool to allow users to select weights for categories on a scale of 100.  The tool uses the d3.js library to render the sliding action.  The tool is demoed in a Ruby on Rails application using static sample data.
 
-Things you may want to cover:
+== Getting Started
 
-* Ruby version
+You can run this code locally, and navigate to:
+  localhost:3000/home/index
+  
+The demo shows two different weight scale instances, which highlight the customizability of the tool.  d3-scale can customize the legend, color scale, and sizes of the tool.  d3-scale also supports multiple instances of the tool on a single page. 
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+To adjust the weighted values on a scale, drag the verticle bar for each category to the desired percentage.
 
 
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
